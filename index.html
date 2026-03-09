@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>格点七巧板游戏 - 按钮下方版</title>
+    <link rel="stylesheet" crossorigin href="./index.css">
+    <style>
+      /* 覆盖样式：将按钮容器移到下方 */
+      .App {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      
+      /* 游戏区域先显示 */
+      .game-area {
+        order: 1;
+        margin: 10px auto;
+      }
+      
+      /* 按钮容器后显示（在下方） */
+      .button-container {
+        order: 2;
+        margin: 10px 0;
+        padding: 10px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 8px;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+      }
+      
+      /* 头部标题 */
+      .App-header {
+        order: 0;
+      }
+      
+      /* 反馈消息 */
+      .feedback-message {
+        order: 1;
+      }
+      
+      /* 说明文字 */
+      .instructions {
+        order: 3;
+      }
+      
+      /* 确保按钮易于点击 */
+      .game-button {
+        min-height: 44px;
+        min-width: 80px;
+        font-size: 16px;
+      }
+      
+      @media (max-width: 768px) {
+        .game-button {
+          min-height: 48px;
+          min-width: 70px;
+          font-size: 15px;
+          padding: 8px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" crossorigin src="./index.js"></script>
+  </body>
+</html>
