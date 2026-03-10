@@ -9,19 +9,28 @@
     margin-top: 1rem !important;
 }
 
+/* 强制按钮移到下方 - 最高优先级 */
+.flex-col-reverse { flex-direction: column !important; }
+.mt-4 { margin-top: 1rem !important; }
 
 /* ============================================
-   格点七巧板游戏 - 按钮位置调整
-   修改时间：2026年3月10日
-   修改内容：将6个操作按钮从游戏区上方移到下方
-   =========================================== */
+   按钮位置强制修复 - 借鉴隔壁朋友的实现
+   使用最简洁的CSS修复按钮位置
+   ============================================ */
 
-/* 强制将包含游戏和按钮的主容器布局方向改为正常自上而下 */
-.flex-col-reverse {
-    flex-direction: column !important;
+/* 强制按钮容器移到最下方 */
+.button-container {
+    order: 100 !important;
+    margin-top: 30px !important;
 }
 
-/* 为按钮区域增加上边距，使其与游戏区域分开 */
-.mt-4 {
-    margin-top: 1rem !important;
+/* 确保游戏区域在上方 */
+.game-area, main > div:nth-child(1) {
+    order: 1 !important;
+}
+
+/* 强制列式布局 */
+.App, main {
+    display: flex !important;
+    flex-direction: column !important;
 }
