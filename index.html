@@ -1,19 +1,152 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>格点七巧板游戏</title>
+    <title>格点七巧板游戏（底部按钮版）</title>
     <style>
-      /* 强制按钮移到下方 - 最高优先级 */
-      .flex-col-reverse { flex-direction: column !important; }
-      .mt-4 { margin-top: 1rem !important; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 原游戏区域 */
+        #game-frame {
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            border: none;
+            margin: 20px 0;
+        }
+
+        /* 底部按钮区域 */
+        .bottom-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 9999;
+        }
+
+        .game-button {
+            padding: 12px 20px;
+            margin: 0 8px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+
+        .game-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .game-button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .game-button.multiselect {
+            background-color: #ff9800;
+        }
+
+        .game-button.multiselect:hover {
+            background-color: #e68900;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            #game-frame {
+                height: 400px;
+            }
+
+            .bottom-controls {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                transform: none;
+            }
+
+            .game-button {
+                padding: 10px 15px;
+                font-size: 14px;
+                margin: 5px 3px;
+            }
+        }
     </style>
-    <link rel="stylesheet" crossorigin href="./index.css">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" crossorigin src="./index.js"></script>
-  </body>
+</head>
+<body>
+    <h1>格点七巧板游戏</h1>
+
+    <!-- 嵌入原游戏 -->
+    <iframe id="game-frame" src="https://heicuo.github.io/grid-tangram-game/"></iframe>
+
+    <!-- 新的底部控制按钮 -->
+    <div class="bottom-controls">
+        <p style="margin: 5px 0; color: #666;">当前组合数: 0</p>
+        <div>
+            <button class="game-button multiselect" id="btn-multiselect">开启多选</button>
+            <button class="game-button" id="btn-combine">组合选中</button>
+            <button class="game-button" id="btn-unlock">解锁选中</button>
+            <button class="game-button" id="btn-rotate">选中旋转</button>
+            <button class="game-button" id="btn-flip-h">选中水平翻转</button>
+            <button class="game-button" id="btn-flip-v">垂直翻转</button>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        window.addEventListener('load', function() {
+            const gameFrame = document.getElementById('game-frame');
+            const gameDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+
+            // 按钮控制逻辑
+            document.getElementById('btn-multiselect').addEventListener('click', function() {
+                // 切换按钮状态
+                this.classList.toggle('active');
+                this.style.backgroundColor = this.classList.contains('active') ? '#ff5722' : '#ff9800';
+
+                // 模拟原游戏的多选功能
+                const ifrBtn = gameDoc.querySelector('button:contains("多选")');
+                if (ifrBtn) {
+                    ifrBtn.click();
+                }
+            });
+
+            // 其他按钮点击
+            const buttons = {
+                'combine': '组合',
+                'unlock': '解锁',
+                'rotate': '旋转',
+                'flip-h': '水平',
+                'flip-v': '垂直'
+            };
+
+            for (const [id, keyword] of Object.entries(buttons)) {
+                document.getElementById('btn-' + id).addEventListener('click', function() {
+                    // 尝试在iframe中找到对应的按钮
+                    const buttonsInIframe = gameDoc.querySelectorAll('button');
+                    buttonsInIframe.forEach(btn => {
+                        const text = btn.textContent || '';
+                        if (text.includes(keyword)) {
+                            btn.click();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
 </html>
